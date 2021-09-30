@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess BOT</title>
+    
+    <script src="data/vue.js"></script>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body>
+    <div class="header">
+        <span class="header_title">Chess</span> 
+        <span class="header_subtitle">bot</span> 
+    </div>
+
+    <!-- START VUE -->
+    <div id="vue1" translate="no">
+
+        <!-- BEATED WHITE -->
+        <div class="beated">
+            <template v-for="fig in beatedWhite">
+                <img :src="`data/${fig}.png`" class="beated__figure" alt="BEATED"> 
+            </template>
+            <div v-show="blackPoints > 0" class="points">
+                {{ blackPoints }}
+            </div>
+        </div>
+
+        <!-- THE BOARD -->
+        <div class="board">
+                <div v-show="cellFrom.bool" class="board__cell_bg" :style="{ backgroundColor: cellFrom.col, transform: 'translate(' + cellFrom.x + '00%,' + cellFrom.y + '00%)' }"></div>
+                <div v-show="cellTo.bool" class="board__cell_bg" :style="{ backgroundColor: cellTo.col, transform: 'translate(' + cellTo.x + '00%,' + cellTo.y + '00%)' }"></div>
+                <div v-show="cellActive.bool" class="board__cell_bg" :style="{ backgroundColor: cellActive.col, transform: 'translate(' + cellActive.x + '00%,' + cellActive.y + '00%)' }"></div>
+                <div v-for="cell in freeMoves" class="board__cell_bg" :style="{ backgroundColor: cell.mc, transform: 'translate(' + cell.mj + '00%,' + cell.mi + '00%)' }"></div>
+                <div v-for="(cell, cell_k) in freeMoves" class="board__cell" @click="CellAction(cell.mi, cell.mj)" :style="{ transform: 'translate(' + cell.mj + '00%,' + cell.mi + '00%)' }"></div>
+                <template v-for="(fig, fig_k) in figures">
+                    <img v-show="fig.type != 0" :src="`data/${fig.type}.png`" class="board__figure" @click="FigureAction(fig.y, fig.x, fig.type)" :style="{ transform: 'translate(' + fig.x + '00%,' + fig.y + '00%)' }" alt="FIGURE"> 
+                </template>
+
+                <!-- GAME OVER TITLE -->
+                <div v-show="gameOver.side" class="gameover_wrapper">
+                    <div class="gameover_title" :style="(gameOver.side > 0) ? 'color: greenyellow;filter:drop-shadow(0 0 15px rgb(4, 172, 4));' : 'color: orangered;filter:drop-shadow(0 0 15px red);'">
+                        {{ gameOver.title }}
+                    </div>
+                </div>
+        </div>
+
+        <!-- BEATED BLACK -->
+        <div class="beated">
+            <template v-for="fig in beatedBlack">
+                <img :src="`data/${fig}.png`" class="beated__figure" alt="BEATED"> 
+            </template>
+            <div v-show="whitePoints > 0" class="points">
+                {{ whitePoints }}
+            </div>
+        </div>
+
+        <!-- REMATCH BUTTON -->
+        <div class="button_rematch" @click="SetUp()">
+            <img src="data/rematch.svg" alt="R">
+            <span>Rematch</span>
+        </div>
+
+        <!-- ITERATIONS -->
+        <div class="iterations">
+            Iterations: <span style="color: #9980ff;">{{ iterationCount }}</span> 
+        </div>
+
+        <div class="history">
+            <div>
+                History:
+            </div>
+            <div v-for="(hist, hi) in history" style="margin-top: 5px;">
+                <span>{{ hi+1 }}.</span>
+                <span style="color: #d2c057;" v-html="hist"></span>
+            </div>
+           
+        </div>
+    </div>
+    <!-- END VUE -->
+    
+    <div class="info"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
